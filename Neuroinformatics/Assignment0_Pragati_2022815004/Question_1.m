@@ -35,6 +35,7 @@ y = mean(x,1);
 subplot (5,1,5)
 plot (y)
 xlim([0 4000])
+%
 
 
 
