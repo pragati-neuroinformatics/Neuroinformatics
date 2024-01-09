@@ -1,0 +1,9 @@
+% Question 1
+load ('power.mat') % loading the power.matfile
+Original_power_matrix = load ('power.mat');
+Power_mat = Original_power_matrix.Power;
+
+transposePower_mat. = Power_mat';
+disp Power_mat
+
+
