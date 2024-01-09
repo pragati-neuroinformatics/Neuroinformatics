@@ -27,16 +27,46 @@ phase = [pi/1 pi/2 pi/3 pi/4];
 figure;
 for i = 1:4 
     x(i,:) = A(i)*sin(2*pi*f(i)*t+phase(i));
-    subplot (5,1,i)
+    subplot (7,1,i)
     plot (x(i,:))
     xlim([0 4000])
 end 
+%Mean extraction of all the 4 frequencies (mixed wave plot)
 y = mean(x,1);
-subplot (5,1,5)
+subplot (7,1,5)
 plot (y)
 xlim([0 4000])
-%
 
+% To recover the information from the mix-wave plot
+Y = fft(y);
+subplot (7,1,6)
+stem(abs(Y));
+stem(angle(Y));
+plot (Y)
 
+%Question-3
+t= [0:0.001:4]; %(Time-period);
+f = [2 8 12 25]; %(Frequrencies in Hz)
+A = [0.5 1 1.5 2];
+phase = [pi/1 pi/2 pi/3 pi/4];
+noise_amplitude = 0.5; %to add noise in the data
+figure;
+for i = 1:4 
+    sw = A(i)*sin(2*pi*f(i)*t+phase(i));
+    wn = noise_amplitude * randn(size(t));
+     sw(i, :) = sw + wn;
+     subplot (7,1,i)
+    plot (sw(i,:))
+    xlim([0 4000])
+end 
+%Mean extraction of all the 4 frequencies including white noise 
+M = mean(sw,1);
+subplot (7,1,5)
+plot (M)
+xlim([0 4000])
+% To recover the information from the mix-wave white noise plot
+FR = fft(y);
+subplot (7,1,6)
+plot (FR)
 
 
