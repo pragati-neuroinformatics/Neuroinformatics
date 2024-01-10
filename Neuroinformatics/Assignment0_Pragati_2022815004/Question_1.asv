@@ -38,7 +38,9 @@ plot (y)
 xlim([0 4000])
 
 % To recover the information from the mix-wave plot
-Y = fft(y);
+Y = abs(fft(y));
+%y_1 = fft(x(1))
+plot (y_1)
 subplot (7,1,6)
 stem(abs(Y));
 stem(angle(Y));
