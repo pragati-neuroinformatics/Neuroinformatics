@@ -13,12 +13,14 @@ disp transposePower_mat
 condition1 = transposePower_mat(:, 1); 
 condition2 = transposePower_mat(:, 2); 
 
-% Perform independent t-test
-[h, p, ci, stats] = ttest2(condition1, condition2);
-disp = stats
-%The p-value is 0.0605 and  h= 0 whichindicates that 
-% ttest2 does not reject the null hypothesis at the default 5% significance level.
-
+% Perform paired t-test (As we want to find out the difference between
+% same subjects spectral power data for 2 conditions successful and unsuccessful) 
+[h,p] = ttest(condition1,condition2)
+% Findings: The returned value of h=1 indicates that ttest reject the null hypothesis
+% at the default 5% signficant level (and the p value is less than 0.05 which means that 
+% there is a signficant difference between the two conditions (successfull
+% and unsuccessful) of that test subject. 
+%%
 % Question 2 
 t= [0:0.001:4]; %(Time-period);
 f = [2 8 12 25]; %(Frequrencies in Hz)
@@ -38,37 +40,39 @@ plot (y)
 xlim([0 4000])
 
 % To recover the information from the mix-wave plot
-Y = abs(fft(y));
-subplot (7,1,6)
-plot(Y);
-ylim([0.01 1100])
-% stem(abs(Y));
-% stem(angle(Y));
-% plot (Y)
-
+Y = fft(y);
+Z = abs (Y);
+figure;
+plot(Z);
+plot([0:1:4000]*(1000/4000), Z); %to scale it down to the original version of frequencies  
+%%
 %Question-3
 t= [0:0.001:4]; %(Time-period);
 f = [2 8 12 25]; %(Frequrencies in Hz)
 A = [0.5 1 1.5 2];
 phase = [pi/1 pi/2 pi/3 pi/4];
-noise_amplitude = 0.5; %to add noise in the data
+noise_amplitude = [0.1 0.2 0.3 0.4]; %to add noise in the data
 figure;
 for i = 1:4 
     sw = A(i)*sin(2*pi*f(i)*t+phase(i));
-    wn = noise_amplitude * randn(size(t));
-     sw(i, :) = sw + wn;
-     subplot (6,1,i)
-    plot (sw(i,:))
-    xlim([0 4000])
-end 
-%Mean extraction of all the 4 frequencies including white noise 
-M = mean(sw,1);
-subplot (6,1,5)
-plot (M)
-xlim([0 4000])
-% To recover the information from the mix-wave white noise plot
-FR = abs(fft(y));
-subplot (6,1,6)
-plot (FR)
+    wn = noise_amplitude (i) * randn(size(t));
+    sw(:, :) = sw(:,:) + wn(:,:);
+    M = mean(sw,1);
+    FR = fft(M);
+    FRE = abs(FR);
+    subplot(4,3,3*i-2)
+    plot(sw)
+    xlim([0 4001])
+    subplot (4,3,3*i - 1)
+    plot(FRE);
+    plot([0:1:4000]*(1000/4000),FRE); 
+    ni = abs(FR) < 200;
+    FR(ni) = 0;
+    filt = ifft(FR);
+    subplot(4,3,3*i)
+    plot(filt)
+    xlim([0 4001])
+ end 
+
 
 
