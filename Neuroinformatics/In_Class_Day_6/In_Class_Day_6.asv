@@ -173,36 +173,35 @@ product_of_fouriers =
 load sampleEEGdata.mat
 data = 'sampleEEGdata.mat';
 % extracting_eeg_data_points
+which_channel_to_plot = 'fcz';
+channel_index = find(strcmpi(which_channel_to_plot, {EEG.chanlocs.labels}));
 eeg_data_all_data_points = squeeze(EEG.data(channel_index, 1:640, 1));
-mean_data = mean(eeg_data_all_data_points);
-sd_data = std(eeg_data_all_data_points);
-eeg_data_zscored_all_data_points = (eeg_data_all_data_points - mean_data)/sd_data;
-plot (eeg_data_zscored_all_data_points)
 
-Inverted_U_kernel= [0.2, 0.4, 0.6, 0.4, 0.2];
+Inverted_U_kernel= [0.2 0.4 0.6 0.4 0.2];
 
-kernel_decay= [1, 0.6, 0.4, 0.30,.2];
+kernel_decay= [1, 0.6, 0.4, 0.30, .2];
 
-fft_eeg_data = fft (eeg_data_zscored_all_data_points, length (eeg_data_zscored_all_data_points) + length (Inverted_U_kernel)-1);
-fft_kernel = fft (Inverted_U_kernel,length (eeg_data_zscored_all_data_points) + length (Inverted_U_kernel)-1); 
-fft_product= fft_eeg_data.*fft_kernel;
+fft_eeg_data = fft (eeg_data_all_data_points, length (eeg_data_all_data_points) + length (Inverted_U_kernel)-1);
+fft_kernel = fft (Inverted_U_kernel,length (eeg_data_all_data_points) + length (Inverted_U_kernel)-1); 
+fft_product= fft_eeg_data.* fft_kernel;
 conv_inverse_output = ifft(fft_product);
-convo_inverse_automate_output_function = conv_inverse_output(3:642); 
+convo_inverse_output = conv_inverse_output(3:642); 
 
 tic
 for k=1:1000
-    fft_eeg_data = fft (eeg_data_zscored_all_data_points, length (eeg_data_zscored_all_data_points) + length (Inverted_U_kernel)-1);
-    fft_kernel = fft (Inverted_U_kernel,length (eeg_data_zscored_all_data_points) + length (Inverted_U_kernel)-1); 
-    fft_product= fft_eeg_data.*fft_kernel;
+    fft_eeg_data = fft (eeg_data_all_data_points, length (eeg_data_all_data_points) + length (Inverted_U_kernel)-1);
+    fft_kernel = fft (Inverted_U_kernel,length (eeg_data_all_data_points) + length (Inverted_U_kernel)-1); 
+    fft_product= fft_eeg_data.* fft_kernel;
     conv_inverse_output = ifft(fft_product);
-    convo_inverse_automate_output_function = conv_inverse_output(3:642); 
+    convo_inverse_output = conv_inverse_output(3:642); 
+
 end
 toc
 
-auto_conv = conv(fft_eeg_data, Inverted_U_kernel, 'same');
+auto_conv = conv(eeg_data_all_data_points, Inverted_U_kernel, 'same');
 
 figure;
-plot(convo_inverse_automate_output_function)
+plot(convo_inverse_output)
 hold on 
 plot(auto_conv)
 legend
