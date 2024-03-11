@@ -49,3 +49,5 @@ Z = abs (Y);
 figure;
 plot(Z);% the data has been band pass filtered at ~15-26 Hz with peak pass at 20Hz
 
+%%
+

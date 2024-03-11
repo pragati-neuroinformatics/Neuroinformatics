@@ -45,10 +45,11 @@ title(['convolved-EEG Data - Electrode (done using conv function_using Inverted_
 dat4conv = [zeros(1,length(Inverted_U_kernel)-1) eeg_data_zscored zeros(1,length(Inverted_U_kernel)-1) ]; % padding zeroes on both sides which depends on the length of kernel and data points. 
 
 % running convolution
+tic
 for ti=1:numel(dat4conv) - length(Inverted_U_kernel) + 1
     convolution_result(ti) = sum(dat4conv(ti:ti+length(Inverted_U_kernel)-1).*Inverted_U_kernel); 
 end
-
+toc
 convolution_result_trimmed = convolution_result(3:52);
 % Plotting convolve data
 subplot(4,1,4)
@@ -110,10 +111,11 @@ title(['convolved-EEG Data - Electrode (done using conv function_using decay fun
 dat4conv = [zeros(1,length(kernel_decay)-1) eeg_data_zscored zeros(1,length(kernel_decay)-1) ]; % padding zeroes on both sides which depends on the length of kernel and data points. 
 
 % running convolution
+tic
 for ti=1:numel(dat4conv) - length(kernel_decay) + 1
     convolution_result(ti) = sum(dat4conv(ti:ti+length(kernel_decay)-1).*kernel_decay); 
 end
-
+toc
 convolution_result_trimmed = convolution_result(3:52);
 % Plotting convolve data
 subplot(4,1,4)
@@ -124,7 +126,12 @@ ylabel('Amplitude');
 title(['convolved-EEG Data - Electrode (done manually_for kernel_decay) ', which_channel_to_plot, ', Trial 1']);
 
 %% 3.) Based on visual inspection, what is the effect of convolving the EEG data with these two kernels? 
-
+%After performing the convolution using these 2 kernel, 
+% for the Inverted U kernel:  a smootheed signal is obtained capturing
+% distinct peaks, whereas for Decay function kernel: a smoothed signal is
+% also obtained but the signal decays smoothly over time capturing the
+% fading the transient EEG signals more appropriately in comparison to Inverted
+%- U kernel. 
 
 %% 4.) To perform convolution using DTFT, FFT and iFFT
 
@@ -166,7 +173,7 @@ for fj=1:N
     fourier_inv_kernel(fj) = sum(sine_wave.*Inverted_U_kernel);
 end
 
-product_of_fouriers = 
+%product_of_fouriers = 
 
 %% Performing FFT and IFFT 
 
@@ -205,3 +212,9 @@ plot(convo_inverse_output)
 hold on 
 plot(auto_conv)
 legend
+
+%% Which of the three methods that you learnt is fastest? Slowest?
+% Among the three methods the fastest method was found to be for the
+% manualcustom code for convolution in comparison to inbuilt function for
+% convolution. 
+
