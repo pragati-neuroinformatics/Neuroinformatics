@@ -98,14 +98,14 @@ end
 % end
 
  
-for i = 1:length(frequencies)
-    for electrode = 1:size(eeg_data_all_electrodes,1)
-        convolution_result = squeeze(convol_result{electrode}(i,:));
-        % Extract power and phase
-        power_phase_matrix(:, i, electrode, 1) = abs(convolution_result) .* abs(convolution_result) ; % Power
-
- power_phase_matrix(:, i, electrode, 1)
+% for i = 1:length(frequencies)
+%     for electrode = 1:size(eeg_data_all_electrodes,1)
+%         convolution_result = squeeze(convol_result{electrode}(i,:));
+%         % Extract power and phase
+%         power_phase_matrix(:, i, electrode, 1) = abs(convolution_result) .* abs(convolution_result) ; % Power
 % 
+%  power_phase_matrix(:, i, electrode, 1)
+% % 
 % 
 % 
 % 
