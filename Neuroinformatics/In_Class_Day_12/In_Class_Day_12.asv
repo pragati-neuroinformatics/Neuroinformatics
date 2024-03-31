@@ -1,6 +1,5 @@
 %1 a) Pick 3 electrodes and 5 time points and plot the distribution of phases 
 % across trials
-% load sample scalp EEG data
 load sampleEEGdata
 electrodes = [47, 57, 62]; %choosing FCz (47), Pz (57) and PO8 (62)
 % center frequency
@@ -20,8 +19,8 @@ for k =1:3
     
     % convolution
     eegconv = ifft(fft(wavelet,n_conv_pow2).*eegfft);
-    eegconv = eegconv(1:n_convolution_length);
-    eegconv = reshape(eegconv(floor((EEG.pnts-1)/2):end-1-ceil((EEG.pnts-1)/2)),EEG.pnts,EEG.trials);
+    eegcon = eegconv(1:n_convolution_length);
+    eegconv = reshape(eegcon(floor((EEG.pnts-1)/2):end-1-ceil((EEG.pnts-1)/2)),EEG.pnts,EEG.trials);
     
     % plot
     figure
